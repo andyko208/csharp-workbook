@@ -53,8 +53,8 @@ namespace TextGame
                         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                         Thread.Sleep(2000);
                         Random rnd = new Random();
-                        int fdmg1 = (int)rnd.Next(3,10);
-                        int edmg1 = (int)rnd.Next(1,5);
+                        int fdmg1 = (int)rnd.Next(3,11);
+                        int edmg1 = (int)rnd.Next(1,6);
                         Console.WriteLine("you hit a {0}", fdmg1);
                         Console.WriteLine("the spider hits a {0}", edmg1);
                         Thread.Sleep(2000);
@@ -88,8 +88,8 @@ namespace TextGame
                         Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                         Thread.Sleep(2000);
                         Random rnd = new Random();
-                        int fdmg1 = (int)rnd.Next(1,8);
-                        int edmg1 = (int)rnd.Next(1,5);
+                        int fdmg1 = (int)rnd.Next(1,9);
+                        int edmg1 = (int)rnd.Next(1,6);
                         Console.WriteLine("you hit a {0}", fdmg1);
                         Console.WriteLine("the spider hits a {0}", edmg1);
                         Thread.Sleep(2000);
