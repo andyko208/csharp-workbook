@@ -6,12 +6,26 @@ namespace PigLatin
     {
         public static void Main()
         {
-            Console.WriteLine("Enter a word: ");
-            // leave this command at the end so your program does not close automatically
-            String inWord = Console.ReadLine();
-            Console.WriteLine("Your word became " + TranslateWord(inWord));
+            // Console.WriteLine("Enter a word: ");
+            // // leave this command at the end so your program does not close automatically
+            // String inWord = Console.ReadLine();
+            // Console.WriteLine("Your word became " + TranslateWord(inWord));
+            if(tests()){
+                Console.WriteLine("Tests passed.");
+            } else {
+                Console.WriteLine("Tests failed.");
+            }
         }
-        
+        public static bool tests(){
+            return 
+                TranslateWord("elephant") == "elephantyay" &&
+                TranslateWord("fox") == "oxfay" &&
+                TranslateWord("choice") == "oicechay" && 
+                TranslateWord("dye") == "yeday" && 
+                TranslateWord("bystander") == "ystanderbay" &&
+                TranslateWord("yellow") == "ellowyay" &&
+                TranslateWord("tsktsk") == "tsktskyay"; //your code was "tsktskay" instead of "tsktskyay"
+        }
         public static string TranslateWord(string word)
         {
             int firstLetterIndex = word.IndexOfAny(new char[] {'a', 'i', 'u', 'e', 'o'});
@@ -40,6 +54,7 @@ namespace PigLatin
                 word += "yay";
             }
             return word;
+            
         }
     }
 }
