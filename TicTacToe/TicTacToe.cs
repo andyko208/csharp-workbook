@@ -16,11 +16,18 @@ namespace TicTacToe
         {
             do
             {
-                int[] taken = new int[2];
+                int[] newArr = new int[2];
                 DrawBoard();
-                GetInput();
-                PlaceMark(taken[0],taken[1]);
-
+                newArr = GetInput();
+                if(PlaceMark(newArr[0],newArr[1]) == true)
+                {
+                    board[newArr[0]][newArr[1]] = playerTurn;
+                }
+                else
+                {
+                    newArr = GetInput();
+                }
+                DrawBoard();
 
             } while (!CheckForWin() && !CheckForTie());
 
@@ -46,13 +53,12 @@ namespace TicTacToe
             if(board[row][column] == "X" || board[row][column] == "O")
                 return false;
             return true;
-            
         }
 
         public static bool CheckForWin()
         {
             // your code goes here
-            if (HorizontalWin() || VerticalWin())
+            if (HorizontalWin() || VerticalWin() || DiagonalWin())
                 return true;
             return false;
         }
@@ -60,7 +66,7 @@ namespace TicTacToe
         public static bool CheckForTie()
         {
             // your code goes here
-            if (HorizontalWin() == false || VerticalWin() == false)
+            if (HorizontalWin() == false || VerticalWin() == false || DiagonalWin() == false)
                 return true;
             return false;
         }
