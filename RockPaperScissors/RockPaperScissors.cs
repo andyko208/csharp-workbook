@@ -8,14 +8,27 @@ namespace RockPaperScissors
         {
             Console.WriteLine("Enter hand 1:");
             string hand1 = Console.ReadLine().ToLower();
-            Console.WriteLine("Enter hand 2:");
-            string hand2 = Console.ReadLine().ToLower();
+            Random rnd = new Random();
+            int comp = rnd.Next(1, 4); //random int between 1 and 3
+            string hand2 = ComputerHands(comp);
+            Console.WriteLine("Computer's hand: {0}", hand2);
             Console.WriteLine(CompareHands(hand1, hand2));
 
             // leave this command at the end so your program does not close automatically
             Console.ReadLine();
         }
-        
+        public static string ComputerHands(int randint)
+        {
+            if(randint == 1)
+            {
+                return "rock";
+            }
+            else if(randint == 2)
+            {
+                return "paper";
+            }
+            return "scissors";  //if(randint == 3)
+        }
         public static string CompareHands(string hand1, string hand2)
         {
             // Your code here
@@ -31,7 +44,7 @@ namespace RockPaperScissors
                 }
                 else            //if hand2 is paper
                 {
-                    return "Hand two wins!";
+                    return "Computer wins!";
                 }
             }
             if(hand1.Equals("scissors"))
@@ -42,7 +55,7 @@ namespace RockPaperScissors
                 }
                 else            //if hand2 is rock
                 {
-                    return "Hand two wins!";
+                    return "Computer wins!";
                 }
             }
             if(hand1.Equals("paper"))
@@ -53,7 +66,7 @@ namespace RockPaperScissors
                 }
                 else            //if hand2 is scissors
                 {
-                    return "Hand two wins!";
+                    return "Computer wins!";
                 }
             }
             return hand1 + ' ' + hand2;
