@@ -14,22 +14,31 @@ namespace TicTacToe
 
         public static void Main()
         {
+            int tieInt = 0;     //if reaches 9, game ends
             do
             {
                 int[] newArr = new int[2];
                 DrawBoard();
                 newArr = GetInput();
-                if(PlaceMark(newArr[0],newArr[1]) == true)
+                if(PlaceMark(newArr[0],newArr[1]) == true && playerTurn == "X")
                 {
                     board[newArr[0]][newArr[1]] = playerTurn;
+                    playerTurn = "O";
+                    tieInt++;
+                }
+                else if(PlaceMark(newArr[0],newArr[1]) == true && playerTurn == "O")
+                {
+                    board[newArr[0]][newArr[1]] = playerTurn;
+                    playerTurn = "X";
+                    tieInt++;
                 }
                 else
                 {
-                    newArr = GetInput();
+                    newArr = GetInput();        //when user input is already taken or out of bound
                 }
                 DrawBoard();
 
-            } while (!CheckForWin() && !CheckForTie());
+            } while (!CheckForWin() && tieInt < 9); //game ending condition
 
             // leave this command at the end so your program does not close automatically
             Console.ReadLine();
@@ -63,13 +72,13 @@ namespace TicTacToe
             return false;
         }
 
-        public static bool CheckForTie()
-        {
-            // your code goes here
-            if (HorizontalWin() == false || VerticalWin() == false || DiagonalWin() == false)
-                return true;
-            return false;
-        }
+        // public static bool CheckForTie() //have my own tie condition
+        // {
+        //     // your code goes here
+        //     if (HorizontalWin() == false || VerticalWin() == false || DiagonalWin() == false)
+        //         return true;
+        //     return false;
+        // }
         
         public static bool HorizontalWin()
         {
