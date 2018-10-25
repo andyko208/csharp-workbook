@@ -8,24 +8,48 @@ namespace Exceptions
         {
             // Console.WriteLine("Enter hand 1:");
             // string hand1 = Console.ReadLine().ToLower();
-            try
-            {
-                String hand1 = getInput();
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine("Enter a valid input please");
-                String hand1 = getInput();
-            }
             Random rnd = new Random();
             int comp = rnd.Next(1, 4); //random int between 1 and 3
             string hand2 = ComputerHands(comp);
-            Console.WriteLine("Computer's hand: {0}", hand2);
-            // Console.WriteLine(CompareHands(hand1, hand2));
-
+            string hand1 = "";
+            while(hand1 != "rock" || hand1 != "paper" || hand1 != "scissors")
+            {
+                try
+                {
+                    hand1 = getInput();
+                    Console.WriteLine("Computer's hand: {0}", hand2);
+                    Console.WriteLine(CompareHands(hand1, hand2));
+        
+                }
+                catch
+                {
+                    Console.WriteLine("Enter a valid input please");
+                    hand1 = getInput();
+                    Console.WriteLine("Computer's hand: {0}", hand2);
+                    Console.WriteLine(CompareHands(hand1, hand2));
+                }
+                finally
+                {
+                    while(hand1 != "rock" || hand1 != "paper" || hand1 != "scissors")
+                    {
+                        try
+                        {
+                            hand1 = getInput();
+                            Console.WriteLine("Computer's hand: {0}", hand2);
+                            Console.WriteLine(CompareHands(hand1, hand2));
+                
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Enter a valid input please");
+                            hand1 = getInput();
+                            Console.WriteLine("Computer's hand: {0}", hand2);
+                            Console.WriteLine(CompareHands(hand1, hand2));
+                        }
+                    }
+                }
+            }
             // leave this command at the end so your program does not close automatically
-            Console.ReadLine();
         }
 
 
