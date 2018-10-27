@@ -18,17 +18,32 @@ namespace Exceptions
                 Console.WriteLine("Computer's hand: {0}", hand2);
                 Console.WriteLine(CompareHands(hand1, hand2));
             }
-            while(hand1 != "rock" && hand1 != "paper" && hand1 != "scissors")
+            catch
             {
-                catch
+                Console.WriteLine("Enter a valid input please");
+                hand1 = getInput();
+                Console.WriteLine("Computer's hand: {0}", hand2);
+                Console.WriteLine(CompareHands(hand1, hand2));         
+            }    
+            finally
+            {
+                while(hand1 != "rock" && hand1 != "paper" && hand1 != "scissors")
                 {
-                    Console.WriteLine("Enter a valid input please");
+                    try
+                    {
                         hand1 = getInput();
                         Console.WriteLine("Computer's hand: {0}", hand2);
                         Console.WriteLine(CompareHands(hand1, hand2));
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Enter a valid input please");
+                        hand1 = getInput();
+                        Console.WriteLine("Computer's hand: {0}", hand2);
+                        Console.WriteLine(CompareHands(hand1, hand2));         
+                    }              
                 }
-            }
-            
+            }        
             // leave this command at the end so your program does not close automatically
         }
 
