@@ -12,43 +12,23 @@ namespace Exceptions
             int comp = rnd.Next(1, 4); //random int between 1 and 3
             string hand2 = ComputerHands(comp);
             string hand1 = "";
-            while(hand1 != "rock" || hand1 != "paper" || hand1 != "scissors")
+            try
             {
-                try
-                {
-                    hand1 = getInput();
-                    Console.WriteLine("Computer's hand: {0}", hand2);
-                    Console.WriteLine(CompareHands(hand1, hand2));
-        
-                }
+                hand1 = getInput();
+                Console.WriteLine("Computer's hand: {0}", hand2);
+                Console.WriteLine(CompareHands(hand1, hand2));
+            }
+            while(hand1 != "rock" && hand1 != "paper" && hand1 != "scissors")
+            {
                 catch
                 {
                     Console.WriteLine("Enter a valid input please");
-                    hand1 = getInput();
-                    Console.WriteLine("Computer's hand: {0}", hand2);
-                    Console.WriteLine(CompareHands(hand1, hand2));
-                }
-                finally
-                {
-                    while(hand1 != "rock" || hand1 != "paper" || hand1 != "scissors")
-                    {
-                        try
-                        {
-                            hand1 = getInput();
-                            Console.WriteLine("Computer's hand: {0}", hand2);
-                            Console.WriteLine(CompareHands(hand1, hand2));
-                
-                        }
-                        catch
-                        {
-                            Console.WriteLine("Enter a valid input please");
-                            hand1 = getInput();
-                            Console.WriteLine("Computer's hand: {0}", hand2);
-                            Console.WriteLine(CompareHands(hand1, hand2));
-                        }
-                    }
+                        hand1 = getInput();
+                        Console.WriteLine("Computer's hand: {0}", hand2);
+                        Console.WriteLine(CompareHands(hand1, hand2));
                 }
             }
+            
             // leave this command at the end so your program does not close automatically
         }
 
@@ -76,6 +56,10 @@ namespace Exceptions
         public static string CompareHands(string hand1, string hand2)
         {
             // Your code here
+            if(hand1 != "rock" && hand1 != "paper" && hand1 != "scissors")
+            {
+                throw new Exception("Wrong hand exception!");
+            }
             if(hand1.Equals(hand2))
             {
                 return "It's a tie!";
