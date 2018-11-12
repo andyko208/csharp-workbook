@@ -8,7 +8,14 @@ public class Program
 		Person darth = new Person("Darth", "Vader", "Imperial");
 		Ship falcon = new Ship("Rebel", "Smuggling", 2);
 		Ship tie = new Ship("Tie", "Fighter", 1);
-		Console.WriteLine("Hello world!");
+		falcon.EnterShip(leia, 0);
+		tie.EnterShip(darth,0);
+		Station targon = new Station("orora", "Imperial", 2);
+		targon.EnterStation(falcon, 0);
+		targon.EnterStation(tie, 1);
+		// targon.ExitStation(1);
+		targon.Roster();
+
 	}
 }
 
@@ -39,7 +46,35 @@ class Person
 		}
 	}
 }
-
+class Station
+{
+	public string name;
+	public string alliance;
+	public int numShip;
+	public Ship[] ships;
+	public Station(string name, string alliance, int numShip)
+	{
+		this.name = name;
+		this.alliance = alliance;
+		this.numShip = numShip;
+	}
+	public void EnterStation(Ship ship, int seat)
+	{
+		this.ships[seat] = ship;
+	}
+	public void ExitStation(int seat)
+	{
+		this.ships[seat] = null;
+	}
+	public string Roster()
+	{
+		foreach (var ship in ships)
+		{
+			return String.Format("{0}", ship.Alliance);
+		}
+		return "that's all!";
+	}
+}
 class Ship
 {
 	private Person[] passengers;
@@ -68,7 +103,7 @@ class Ship
 		{
 			foreach (var person in passengers)
 			{
-				// Console.WriteLine(String.Format("{0}", person.FullName));
+				return String.Format("{0}", person.FullName);
 			}
 
 			return "That's Everybody!";
