@@ -1,21 +1,26 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Collections;
 public class Program
 {
 	public static void Main()
 	{
 		Person leia = new Person("Leia", "Organa", "Rebel");
 		Person darth = new Person("Darth", "Vader", "Imperial");
+		Person cads = new Person("asdf", "qwe", "Rebel");
+		Person ewqr = new Person("John", "Tom", "Imperial");
 		Ship falcon = new Ship("Rebel", "Smuggling", 2);
-		Ship tie = new Ship("Tie", "Fighter", 1);
+		Ship tie = new Ship("Tie", "Fighter", 2);
 		falcon.EnterShip(leia, 0);
+		falcon.EnterShip(cads, 1);
 		tie.EnterShip(darth,0);
+		tie.EnterShip(ewqr,1);
 		Station targon = new Station("orora", "Imperial", 2);
 		targon.EnterStation(falcon, 0);
 		targon.EnterStation(tie, 1);
-		// targon.ExitStation(1);
-		targon.Roster();
-
+		Console.WriteLine(targon.Roster());
+		Console.WriteLine(falcon.Passengers());
+		Console.WriteLine(tie.Passengers());
 	}
 }
 
@@ -56,7 +61,7 @@ class Station
 	{
 		this.name = name;
 		this.alliance = alliance;
-		this.numShip = numShip;
+		ships = new Ship[numShip];
 	}
 	public void EnterStation(Ship ship, int seat)
 	{
@@ -68,11 +73,12 @@ class Station
 	}
 	public string Roster()
 	{
+		string line = " ";
 		foreach (var ship in ships)
 		{
-			return String.Format("{0}", ship.Alliance);
+			line += String.Format("{0}", ship.Alliance) + " ";
 		}
-		return "that's all!";
+		return line;
 	}
 }
 class Ship
@@ -97,17 +103,14 @@ class Ship
 		set;
 	}
 
-	public string Passengers
+	public String Passengers()
 	{
-		get
+		string line = "";
+		foreach (var person in passengers)
 		{
-			foreach (var person in passengers)
-			{
-				return String.Format("{0}", person.FullName);
-			}
-
-			return "That's Everybody!";
+			line += String.Format("{0}", person.FullName) + " ";
 		}
+		return line;
 	}
 
 	public void EnterShip(Person person, int seat)
