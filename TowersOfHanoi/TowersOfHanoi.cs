@@ -10,6 +10,7 @@ namespace TowersOfHanoi
         static void Main(string[] args)
         {
             Game game = new Game();
+            game.printKeys();
         }
     }
     class Block
@@ -22,19 +23,50 @@ namespace TowersOfHanoi
     }
     class Tower
     {
-        Stack<Block> towers;
+        Stack<Block> Blocks;
         public Tower()
         {
-            towers = new Stack<Block>();
+            Blocks = new Stack<Block>();
+        }
+        public void Push(Block block)
+        {
+            Blocks.Push(block);
+        }
+        public Stack<Block> Pop()
+        {
+            return Blocks;
         }
     }
     class Game
     {
-		Dictionary<int, Stack<Block>> setBlocks;
+		Dictionary<string, Tower> Towers;
+
         public Game()
         {
-            setBlocks = new Dictionary<int, Stack<Block>>();
-            
+            Towers = new Dictionary<String, Tower>();
+            Towers["A"] = new Tower();
+            Towers["B"] = new Tower();
+            Towers["C"] = new Tower();
+            Block a = new Block(1);
+            Block b = new Block(2);
+            Block c = new Block(3);
+            Block d = new Block(4);
+            Towers["A"].Push(a);
+            Towers["A"].Push(b);
+            Towers["A"].Push(c);
+            Towers["A"].Push(d);
+        }
+        public void printKeys()
+        {
+            foreach(string key in Towers.Keys)
+            {
+                Console.Write(key + ": ");
+                foreach(Block blck in Towers.Values)    //has to be ~~ in blocks inside stack
+                {
+                    Console.Write(blck.Weight);
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
