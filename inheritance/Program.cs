@@ -11,10 +11,11 @@ namespace Inheritance
             Engineering Computer = new Engineering("engineering", 135, 40);
             Literature English = new Literature("Liberal Arts", 120, 15);
             Business Advertising = new Business("Business", 125, 35);
-            // string diff = Computer.difficulty();
-            // Console.WriteLine("Computer engineering major is a {0}", diff);
+            Console.WriteLine(English.intro());         //superclass method
+            Console.WriteLine(Computer.intro());        //overridden method
+            Console.WriteLine();
             Console.WriteLine("Computer's data type is {0}", Computer.GetType());
-            Console.WriteLine("English's data type is{0}", English.GetType());
+            Console.WriteLine("English's data type is {0}", English.GetType());
             Console.WriteLine("Advertising's data type is {0}", Advertising.GetType());
         }
     }
@@ -28,11 +29,10 @@ namespace Inheritance
             this.department = department;
             this.creditHours = creditHours;
         }
-        public string difficulty()  //superclass method
+        virtual
+        public string intro()  //superclass method
         {
-            if(creditHours >= 125)
-                return "tough major";
-            return "decent major";
+            return "I'm from " + department + " department";
         }
     }
     public class Engineering: Major
@@ -42,13 +42,11 @@ namespace Inheritance
         {
             this.labHours = labHours;
         }
-        // override
-        // public string difficulty()
-        // {
-        //     if(creditHours >= 140)
-        //         return "tough major";
-        //     return "decent major";
-        // }
+        override
+        public string intro()
+        {
+            return String.Format("I'll be stuck in lab for {0} hours!",labHours);
+        }
     }
     public class Literature: Major
     {
