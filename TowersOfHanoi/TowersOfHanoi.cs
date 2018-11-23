@@ -12,6 +12,7 @@ namespace TowersOfHanoi
             Game game = new Game();
             game.drawBoard();
             game.MovePiece("A", "B");
+            Console.WriteLine();
             game.drawBoard();
         }
     }
@@ -49,10 +50,10 @@ namespace TowersOfHanoi
             Block b = new Block(2);
             Block c = new Block(3);
             Block d = new Block(4);
-            Towers["A"].Push(d);
-            Towers["A"].Push(c);
-            Towers["A"].Push(b);
             Towers["A"].Push(a);
+            Towers["A"].Push(b);
+            Towers["A"].Push(c);
+            Towers["A"].Push(d);
         }
         public void drawBoard()
         {
@@ -69,7 +70,14 @@ namespace TowersOfHanoi
         }
         public void MovePiece(string popOff, string pushOn)
         {
-            Towers[pushOn].Push(Towers[popOff].Blocks.Pop());
+            Stack<Block> st = Towers[popOff].Blocks;
+            Stack<Block> rev = new Stack<Block>();
+            while (st.Count != 0)
+            {
+                rev.Push(st.Pop());
+            }
+            Towers[pushOn].Push(rev.Pop());
+            // Towers[pushOn].Push(Towers[popOff].Blocks.Pop());
         }
     }
 }
