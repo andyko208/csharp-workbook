@@ -14,6 +14,15 @@ namespace checkpoint2
         public string Symbol { get; set; } //the actual symbol either an open or a closed dot
         public int[] Position { get; set; } //the coordinates of its place on the grid
         public string Color { get; set; } //the team name (either "white" or "black")
+        public Checker(String color)
+        {
+            color = color.ToLower();
+            if(color == "white")
+                Symbol =  "○";
+            else{
+                Symbol = "●";
+            }
+        }
     }
     class Board
     {
