@@ -30,15 +30,29 @@ namespace checkpoint2
         public List<Checker> Checkers { get; set; } //the collection of Checkers currently on the board
         CreateBoard() //Creating the grid that is the board
         {
-
+            for(int i = 0; i < 8; i++)
+            {
+                for(int j = 0; j < 8; j++)
+                {
+                    Grid[i][j] = "";
+                }
+            }
         }
         DrawBoard() //View the game board
         {
-
+            for(int i = 0; i < 8; i++)
+            {
+                for(int j = 0; j < 8; j++)
+                {
+                    Console.Write(Grid[i][j]);
+                }
+                Console.WriteLine();
+            }
         }
         GenerateBoard() //Creating all the Checker instances at the beginning of the game
         {
-
+            public int[] whitePositions { get; set; }
+            public int[] blackPositions { get; set; }
         }
         SelectChecker() //Selecting a particular checker
         {
