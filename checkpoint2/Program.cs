@@ -7,9 +7,10 @@ namespace checkpoint2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
             Board ba = new Board();
             ba.CreateBoard();
+            ba.GenerateCheckers();
+            ba.PlaceCheckers();
             ba.DrawBoard();
         }
     }
@@ -39,7 +40,7 @@ namespace checkpoint2
             {
                 for(int j = 0; j < 8; j++)
                 {
-                    Grid[i,j] = "H";
+                    Grid[i,j] = " ";
                 }
             }
         }
@@ -59,24 +60,24 @@ namespace checkpoint2
             int[] whitePositions = new int[2];
             int[] blackPositions = new int[2];
             Checkers = new List<Checker>();
-            for(int i = 0; i < 6; i++)
+            for(int i = 0; i < 8; i++)
             {
-                int row = i;
-                for(int j = 0; j < 8; j+=2)
+                for(int j = 1; j < 8; j+=2)
                 {
                     if(i == 0 || i == 2 || i == 6)
                     {
-                        j++;
                         if(i == 0 || i == 1 || i == 2)
                         {
-                            whitePositions = new int[]{row, j};
+                            whitePositions = new int[]{i, j};
                             Checker check = new Checker("white");
+                            check.Position = whitePositions;
                             Checkers.Add(check);
                         }
                         else if(i == 5 || i == 6 || i == 7)
                         {
-                            blackPositions = new int[]{row, j};
+                            blackPositions = new int[]{i, j};
                             Checker check = new Checker("black");
+                            check.Position = blackPositions;
                             Checkers.Add(check);
                         }
                     }
@@ -84,18 +85,32 @@ namespace checkpoint2
                     {
                         if(i == 0 || i == 1 || i == 2)
                         {
-                            whitePositions = new int[]{row, j};
+                            j--;
+                            whitePositions = new int[]{i, j};
                             Checker check2 = new Checker("white");
+                            check2.Position = whitePositions;
                             Checkers.Add(check2);
+                            j++;
                         }
                         else if(i == 5 || i == 6 || i == 7)
                         {
-                            blackPositions = new int[]{row, j};
+                            j--;
+                            blackPositions = new int[]{i, j};
                             Checker check2 = new Checker("black");
+                            check2.Position = blackPositions;
                             Checkers.Add(check2);
+                            j++;
                         }
                     }
                 }
+            }
+        }
+        public void PlaceCheckers()
+        {
+            for (int i = 0; i < Checkers.Count; i++)
+            {
+                int[] position = Checkers[i].Position;
+                Grid[position[0],position[1]] = Checkers[i].Symbol;
             }
         }
         public void GenerateBoard() //Creating all the Checker instances at the beginning of the game
