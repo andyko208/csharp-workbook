@@ -12,6 +12,26 @@ namespace checkpoint2
             ba.GenerateCheckers();
             ba.PlaceCheckers();
             ba.DrawBoard();
+            int selectRow;
+            int selectCol;
+            int placeRow;
+            int placeCol;
+            Console.WriteLine("Enter Pickup Row:");
+            selectRow = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter Pickup Column:");
+            selectCol = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter Placement Row:");
+            placeRow = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter Placement Column:");
+            placeCol = Convert.ToInt32(Console.ReadLine());
+            Checker check = ba.SelectChecker(selectRow, selectCol);
+            ba.MoveChecker(check, placeRow, placeCol);
+            ba.PlaceCheckers();
+            ba.DrawBoard();
+            ba.RemoveChecker(2,1);  //removes checker from the list and Grid
+            ba.PlaceCheckers();
+            Console.WriteLine();
+            ba.DrawBoard();
         }
     }
     class Checker
@@ -55,7 +75,7 @@ namespace checkpoint2
                 Console.WriteLine();
             }
         }
-        public void GenerateCheckers()
+        public void GenerateCheckers()      //Creating all the Checker instances at the beginning of the game
         {
             int[] whitePositions = new int[2];
             int[] blackPositions = new int[2];
@@ -105,7 +125,7 @@ namespace checkpoint2
                 }
             }
         }
-        public void PlaceCheckers()
+        public void PlaceCheckers()             //puts symbols in Grid to see actual checkers
         {
             for (int i = 0; i < Checkers.Count; i++)
             {
@@ -113,20 +133,42 @@ namespace checkpoint2
                 Grid[position[0],position[1]] = Checkers[i].Symbol;
             }
         }
-        public void GenerateBoard() //Creating all the Checker instances at the beginning of the game
-        {
+        // public void GenerateBoard() Creating all the Checker instances at the beginning of the game
+        // {
             
-        }
-        public void SelectChecker() //Selecting a particular checker
+        // }
+        public Checker SelectChecker(int row, int column) //Selecting a particular checker
         {
-
+            int[] position =  new int[]{row, column};
+            for(int i = 0; i < Checkers.Count; i++)
+            {
+                if(Checkers[i].Position[0] == row && Checkers[i].Position[1] == column)
+                    return Checkers[i];
+            }
+            return Checkers[0];
         }
-        public void RemoveChecker() //Remove a defeated checker
+        public void MoveChecker(Checker check, int row, int column)
         {
-
+            Grid[check.Position[0],check.Position[1]] = " "; //removes symbol before moving out
+            check.Position[0] = row;
+            check.Position[1] = column;
+        }
+        public void RemoveChecker(int row, int column) //Remove a defeated checker
+        {
+            Grid[row,column] = " ";
+            Checker chek = SelectChecker(row, column);
+            Checkers.Remove(chek);
         }
         public Boolean CheckForWin() //Check if all Checkers of one color have been removed
         {
+            int count = 0;
+            for(int i = 0; i < Checkers.Count-1; i++)
+            {
+                if(Checkers[i].Symbol == Checkers[i+1].Symbol)
+                    count++;
+            }
+            if(count == Checkers.Count)
+                return true;
             return false;
         }
     }
