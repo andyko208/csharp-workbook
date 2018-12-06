@@ -16,22 +16,39 @@ namespace checkpoint2
             int selectCol;
             int placeRow;
             int placeCol;
-            Console.WriteLine("Enter Pickup Row:");
-            selectRow = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Enter Pickup Column:");
-            selectCol = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Enter Placement Row:");
-            placeRow = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Enter Placement Column:");
-            placeCol = Convert.ToInt32(Console.ReadLine());
-            Checker check = ba.SelectChecker(selectRow, selectCol);
-            ba.MoveChecker(check, placeRow, placeCol);
-            ba.PlaceCheckers();
-            ba.DrawBoard();
-            ba.RemoveChecker(2,1);  //removes checker from the list and Grid
-            ba.PlaceCheckers();
-            Console.WriteLine();
-            ba.DrawBoard();
+            String turn = "";
+            int turnDefine = 0;
+            while(ba.CheckForWin() != true)
+            {
+                if(turnDefine % 2 == 0)     
+                    turn = "White";
+                else{
+                    turn = "Black";
+                }
+                Console.WriteLine("{0} checker's turn",turn);   //it is actually possible for black/white to place on white/black's turn :(
+                Console.WriteLine("Enter Pickup Row:");
+                selectRow = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter Pickup Column:");
+                selectCol = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter Placement Row:");
+                placeRow = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Enter Placement Column:");
+                placeCol = Convert.ToInt32(Console.ReadLine());
+                Checker check = ba.SelectChecker(selectRow, selectCol);
+                if(ba.isValid(check, placeRow, placeCol))
+                {
+                    ba.MoveChecker(check, placeRow, placeCol);
+                    ba.RemoveChecker(selectRow,selectCol);  //removes checker from the list and Grid
+                    ba.PlaceCheckers();                     //applies changes in Checkers list to Grid
+                    Console.WriteLine();
+                    ba.DrawBoard();
+                    turnDefine++;
+                }
+                else{
+                    Console.WriteLine("Your move failed, try something valid.");
+                    ba.DrawBoard();
+                }
+            }
         }
     }
     class Checker
@@ -133,10 +150,7 @@ namespace checkpoint2
                 Grid[position[0],position[1]] = Checkers[i].Symbol;
             }
         }
-        // public void GenerateBoard() Creating all the Checker instances at the beginning of the game
-        // {
-            
-        // }
+
         public Checker SelectChecker(int row, int column) //Selecting a particular checker
         {
             int[] position =  new int[]{row, column};
@@ -147,18 +161,21 @@ namespace checkpoint2
             }
             return Checkers[0];
         }
+
         public void MoveChecker(Checker check, int row, int column)
         {
             Grid[check.Position[0],check.Position[1]] = " "; //removes symbol before moving out
             check.Position[0] = row;
             check.Position[1] = column;
         }
+
         public void RemoveChecker(int row, int column) //Remove a defeated checker
         {
             Grid[row,column] = " ";
             Checker chek = SelectChecker(row, column);
             Checkers.Remove(chek);
         }
+
         public Boolean CheckForWin() //Check if all Checkers of one color have been removed
         {
             int count = 0;
@@ -171,7 +188,78 @@ namespace checkpoint2
                 return true;
             return false;
         }
+
+        public Boolean isValid(Checker check, int row, int col)
+        {
+            int checkersRow = check.Position[0];
+            int checkersCol = check.Position[1];
+            if(0 <= row && row < 8 && 0 <= col && row < 8)
+            {
+                if(check.Symbol == "○")
+                {
+                    if(row > checkersRow && col > checkersCol || col < checkersCol) //checks if user input trying to move backwards 
+                    {   
+                        if(row - checkersRow == 1 && checkersCol - col == 1)    //moving left & forward
+                        {
+                            if(Grid[checkersRow+1,checkersCol-1] == " ")        //able to move if nothing's in the place aiming to move
+                                return true;
+                            else if(Grid[checkersRow+1,checkersCol-1] == "○")   //unable to move if same-colored checkers is there
+                                return false;
+                        }
+                        else if(row - checkersRow == 1 && checkersCol - col == -1) //moving right & forward
+                        {
+                            if(Grid[checkersRow+1,checkersCol+1] == " ")        //able to move if nothing's in the place aiming to move
+                                return true;
+                            else if(Grid[checkersRow+1,checkersCol+1] == "○")   //unable to move if same-colored checkers is there
+                                return false;
+                        }
+                        else if(row - checkersRow == 2 && checkersCol - col == 2)   //jumping left
+                        {
+                            if(Grid[checkersRow+1,checkersCol-1] == "●" && Grid[checkersRow+2,checkersCol-2] == " ")    //jumping possible condition
+                                return true;
+                        }
+                        else if(row - checkersRow == 2 && checkersCol - col  == -2)   //jumping right
+                        {
+                            if(Grid[checkersRow+1,checkersCol+1] == "●" && Grid[checkersRow+2,checkersCol+2] == " ")    //jumping possible condition
+                                return true;
+                        }
+                    }
+                }
+                if(check.Symbol == "●")
+                {
+                    if(row < checkersRow && col > checkersCol || col < checkersCol)
+                    {
+                        if(row - checkersRow == -1 && checkersCol - col == 1)    //moving left & forward
+                        {
+                            if(Grid[checkersRow-1,checkersCol-1] == " ")        //able to move if nothing's in the place aiming to move
+                                return true;
+                            else if(Grid[checkersRow-1,checkersCol-1] == "●")   //unable to move if same-colored checkers is there
+                                return false;
+                        }
+                        else if(row - checkersRow == -1 && checkersCol - col == -1) //moving right & forward
+                        {
+                            if(Grid[checkersRow-1,checkersCol+1] == " ")        //able to move if nothing's in the place aiming to move
+                                return true;
+                            else if(Grid[checkersRow-1,checkersCol+1] == "●")   //unable to move if same-colored checkers is there
+                                return false;
+                        }
+                        else if(row - checkersRow == -2 && checkersCol - col == 2)   //jumping left
+                        {
+                            if(Grid[checkersRow-1,checkersCol-1] == "○" && Grid[checkersRow-2,checkersCol-2] == " ")    //jumping possible condition
+                                return true;
+                        }
+                        else if(row - checkersRow == -2 && checkersCol - col == -2)   //jumping right
+                        {
+                            if(Grid[checkersRow-1,checkersCol+1] == "○" && Grid[checkersRow-2,checkersCol+2] == " ")    //jumping possible condition
+                                return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
     }
+
     class Game
     {
         public void Start() //Starting a game
