@@ -9,15 +9,18 @@ namespace checkpoint2
         {
             Board ba = new Board();
             ba.CreateBoard();
-            ba.GenerateCheckers();
-            ba.PlaceCheckers();
-            ba.DrawBoard();
-            int selectRow;
-            int selectCol;
-            int placeRow;
-            int placeCol;
-            String turn = "";
+            ba.GenerateCheckers();  //creates checkers and puts them inside the list Checkers
+            ba.PlaceCheckers(); //places checkers from the list to the Grid 
+            ba.DrawBoard();     //displays Grid, which has checker symbols on
+            int selectRow;      //user input
+            int selectCol;      //user input
+            int placeRow;       //user input
+            int placeCol;       //user input
+            //to define player1(white) and player2(black)'s turns
+            //it is actually possible for black/white to place on white/black's turn :(
+            String turn = "";   
             int turnDefine = 0;
+            ////
             while(ba.CheckForWin() != true)
             {
                 if(turnDefine % 2 == 0)     
@@ -25,7 +28,7 @@ namespace checkpoint2
                 else{
                     turn = "Black";
                 }
-                Console.WriteLine("{0} checker's turn",turn);   //it is actually possible for black/white to place on white/black's turn :(
+                Console.WriteLine("{0} checker's turn",turn);
                 Console.WriteLine("Enter Pickup Row:");
                 selectRow = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Enter Pickup Column:");
@@ -34,12 +37,20 @@ namespace checkpoint2
                 placeRow = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Enter Placement Column:");
                 placeCol = Convert.ToInt32(Console.ReadLine());
-                Checker check = ba.SelectChecker(selectRow, selectCol);
+                Checker check = ba.SelectChecker(selectRow, selectCol);     //creates an instance of a checker based on the user's input
                 if(ba.isValid(check, placeRow, placeCol))
                 {
-                    ba.MoveChecker(check, placeRow, placeCol);
-                    ba.RemoveChecker(selectRow,selectCol);  //removes checker from the list and Grid
-                    ba.PlaceCheckers();                     //applies changes in Checkers list to Grid
+                    ba.MoveChecker(check, placeRow, placeCol);  
+                    if(Math.Abs(selectRow - placeRow) == 2 && Math.Abs(selectCol - placeCol) == 2)  //when the user tries to do a "jumping"
+                    {
+                        int rowDestination = selectRow - check.Position[0] + check.Position[0];  //row where checker will move to
+                        int colDestination = selectCol - check.Position[1] + check.Position[1];  //column where checker will move to
+                        int rowBetween = (selectRow - check.Position[0])/2 + check.Position[0];  //checks if any checker is between original place & destination 
+                        int colBetween = (selectCol - check.Position[1])/2 + check.Position[1];  //checks if any checker is between original place & destination
+                        if(ba.Grid[rowBetween, colBetween] != check.Symbol && ba.Grid[rowBetween, colBetween] != " " && ba.Grid[rowDestination,colDestination] == " ")   //full jumping condition
+                            ba.RemoveChecker(rowBetween,colBetween);           //removes the checker between the original place & where it will move if the jumping condition is satisfied
+                    }
+                    ba.PlaceCheckers();                         //applies changes in Checkers list to Grid
                     Console.WriteLine();
                     ba.DrawBoard();
                     turnDefine++;
@@ -94,9 +105,10 @@ namespace checkpoint2
         }
         public void GenerateCheckers()      //Creating all the Checker instances at the beginning of the game
         {
-            int[] whitePositions = new int[2];
-            int[] blackPositions = new int[2];
+            int[] whitePositions = new int[2];  //just to use as a placeholder
+            int[] blackPositions = new int[2];  //just to use as a placeholder
             Checkers = new List<Checker>();
+            //defines positions of each checkers as given in the textbook, and puts them inside the list Checkers
             for(int i = 0; i < 8; i++)
             {
                 for(int j = 1; j < 8; j+=2)
@@ -193,72 +205,114 @@ namespace checkpoint2
         {
             int checkersRow = check.Position[0];
             int checkersCol = check.Position[1];
-            if(0 <= row && row < 8 && 0 <= col && row < 8)
+            int rowDestination = row - checkersRow + checkersRow;  //row where checker will move to
+            int colDestination = col - checkersCol + checkersCol;  //column where checker will move to
+            if(check.Symbol == "○")
             {
-                if(check.Symbol == "○")
+                if(row > checkersRow)   //checks if user input trying to move backwards 
                 {
-                    if(row > checkersRow && col > checkersCol || col < checkersCol) //checks if user input trying to move backwards 
-                    {   
-                        if(row - checkersRow == 1 && checkersCol - col == 1)    //moving left & forward
-                        {
-                            if(Grid[checkersRow+1,checkersCol-1] == " ")        //able to move if nothing's in the place aiming to move
-                                return true;
-                            else if(Grid[checkersRow+1,checkersCol-1] == "○")   //unable to move if same-colored checkers is there
-                                return false;
-                        }
-                        else if(row - checkersRow == 1 && checkersCol - col == -1) //moving right & forward
-                        {
-                            if(Grid[checkersRow+1,checkersCol+1] == " ")        //able to move if nothing's in the place aiming to move
-                                return true;
-                            else if(Grid[checkersRow+1,checkersCol+1] == "○")   //unable to move if same-colored checkers is there
-                                return false;
-                        }
-                        else if(row - checkersRow == 2 && checkersCol - col == 2)   //jumping left
-                        {
-                            if(Grid[checkersRow+1,checkersCol-1] == "●" && Grid[checkersRow+2,checkersCol-2] == " ")    //jumping possible condition
-                                return true;
-                        }
-                        else if(row - checkersRow == 2 && checkersCol - col  == -2)   //jumping right
-                        {
-                            if(Grid[checkersRow+1,checkersCol+1] == "●" && Grid[checkersRow+2,checkersCol+2] == " ")    //jumping possible condition
-                                return true;
-                        }
-                    }
-                }
-                if(check.Symbol == "●")
-                {
-                    if(row < checkersRow && col > checkersCol || col < checkersCol)
+                    if(Math.Abs(rowDestination - checkersRow) == 1 && Math.Abs(colDestination - checkersCol) == 1) //when trying to move 
                     {
-                        if(row - checkersRow == -1 && checkersCol - col == 1)    //moving left & forward
-                        {
-                            if(Grid[checkersRow-1,checkersCol-1] == " ")        //able to move if nothing's in the place aiming to move
-                                return true;
-                            else if(Grid[checkersRow-1,checkersCol-1] == "●")   //unable to move if same-colored checkers is there
-                                return false;
-                        }
-                        else if(row - checkersRow == -1 && checkersCol - col == -1) //moving right & forward
-                        {
-                            if(Grid[checkersRow-1,checkersCol+1] == " ")        //able to move if nothing's in the place aiming to move
-                                return true;
-                            else if(Grid[checkersRow-1,checkersCol+1] == "●")   //unable to move if same-colored checkers is there
-                                return false;
-                        }
-                        else if(row - checkersRow == -2 && checkersCol - col == 2)   //jumping left
-                        {
-                            if(Grid[checkersRow-1,checkersCol-1] == "○" && Grid[checkersRow-2,checkersCol-2] == " ")    //jumping possible condition
-                                return true;
-                        }
-                        else if(row - checkersRow == -2 && checkersCol - col == -2)   //jumping right
-                        {
-                            if(Grid[checkersRow-1,checkersCol+1] == "○" && Grid[checkersRow-2,checkersCol+2] == " ")    //jumping possible condition
-                                return true;
-                        }
+                        if(Grid[rowDestination,colDestination] == " ")
+                            return true;
+                    }
+                    if(Math.Abs(rowDestination - checkersRow) == 2 && Math.Abs(colDestination - checkersCol) == 2) //when trying to jump
+                    {
+                        int rowBetween = (row - checkersRow)/2 + checkersRow;   //checks if any checker is between original place & destination
+                        int colBetween = (col - checkersCol)/2 + checkersCol;   //checks if any checker is between original place & destination
+                        if(Grid[rowBetween, colBetween] != check.Symbol && Grid[rowBetween, colBetween] != " " && Grid[rowDestination,colDestination] == " ")   //if the checker between is the other color checker, return true
+                            return true; 
                     }
                 }
-            }
+            } 
+            if(check.Symbol == "●")
+            {
+                if(row < checkersRow)   //checks if user input trying to move backwards 
+                {
+                    if(Math.Abs(rowDestination - checkersRow) == 1 && Math.Abs(colDestination - checkersCol) == 1) //when trying to move 
+                    {
+                        if(Grid[rowDestination,colDestination] == " ")
+                            return true;
+                    }
+                    if(Math.Abs(rowDestination - checkersRow) == 2 && Math.Abs(colDestination - checkersCol) == 2) //when trying to jump
+                    {
+                        int rowBetween = (row - checkersRow)/2 + checkersRow;   //checks if any checker is between original place & destination
+                        int colBetween = (col - checkersCol)/2 + checkersCol;   //checks if any checker is between original place & destination
+                        if(Grid[rowBetween, colBetween] != check.Symbol && Grid[rowBetween, colBetween] != " " && Grid[rowDestination,colDestination] == " ")   //if the checker between is the other color checker, return true
+                            return true; 
+                    }
+                }
+            }   
             return false;
         }
     }
+            ///////////////////////////
+            //found a better solution//
+            ///////////////////////////
+
+            // {
+            //     if(check.Symbol == "○")
+            //     {
+            //         if(row > checkersRow && col > checkersCol || col < checkersCol) //checks if user input trying to move backwards 
+            //         {   
+            //             if(row - checkersRow == 1 && checkersCol - col == 1)    //moving left & forward
+            //             {
+            //                 if(Grid[checkersRow+1,checkersCol-1] == " ")        //able to move if nothing's in the place aiming to move
+            //                     return true;
+            //                 else if(Grid[checkersRow+1,checkersCol-1] == "○")   //unable to move if same-colored checkers is there
+            //                     return false;
+            //             }
+            //             else if(row - checkersRow == 1 && checkersCol - col == -1) //moving right & forward
+            //             {
+            //                 if(Grid[checkersRow+1,checkersCol+1] == " ")        //able to move if nothing's in the place aiming to move
+            //                     return true;
+            //                 else if(Grid[checkersRow+1,checkersCol+1] == "○")   //unable to move if same-colored checkers is there
+            //                     return false;
+            //             }
+            //             else if(row - checkersRow == 2 && checkersCol - col == 2)   //jumping left
+            //             {
+            //                 if(Grid[checkersRow+1,checkersCol-1] == "●" && Grid[checkersRow+2,checkersCol-2] == " ")    //jumping possible condition
+            //                     return true;
+            //             }
+            //             else if(row - checkersRow == 2 && checkersCol - col  == -2)   //jumping right
+            //             {
+            //                 if(Grid[checkersRow+1,checkersCol+1] == "●" && Grid[checkersRow+2,checkersCol+2] == " ")    //jumping possible condition
+            //                     return true;
+            //             }
+            //         }
+            //     }
+            //     if(check.Symbol == "●")
+            //     {
+            //         if(row < checkersRow && col > checkersCol || col < checkersCol)
+            //         {
+            //             if(row - checkersRow == -1 && checkersCol - col == 1)    //moving left & forward
+            //             {
+            //                 if(Grid[checkersRow-1,checkersCol-1] == " ")        //able to move if nothing's in the place aiming to move
+            //                     return true;
+            //                 else if(Grid[checkersRow-1,checkersCol-1] == "●")   //unable to move if same-colored checkers is there
+            //                     return false;
+            //             }
+            //             else if(row - checkersRow == -1 && checkersCol - col == -1) //moving right & forward
+            //             {
+            //                 if(Grid[checkersRow-1,checkersCol+1] == " ")        //able to move if nothing's in the place aiming to move
+            //                     return true;
+            //                 else if(Grid[checkersRow-1,checkersCol+1] == "●")   //unable to move if same-colored checkers is there
+            //                     return false;
+            //             }
+            //             else if(row - checkersRow == -2 && checkersCol - col == 2)   //jumping left
+            //             {
+            //                 if(Grid[checkersRow-1,checkersCol-1] == "○" && Grid[checkersRow-2,checkersCol-2] == " ")    //jumping possible condition
+            //                     return true;
+            //             }
+            //             else if(row - checkersRow == -2 && checkersCol - col == -2)   //jumping right
+            //             {
+            //                 if(Grid[checkersRow-1,checkersCol+1] == "○" && Grid[checkersRow-2,checkersCol+2] == " ")    //jumping possible condition
+            //                     return true;
+            //             }
+            //         }
+            //     }
+            // }
+            // return false;
 
     class Game
     {
