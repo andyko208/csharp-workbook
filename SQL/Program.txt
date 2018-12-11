@@ -1,0 +1,21 @@
+﻿sqlite> create table toys(id int, name varchar(100), price float, quantity int);
+
+sqlite> insert into toys (id, name, price, quantity) values(1, 'stuffed animal', 10.00, 5);
+
+sqlite> insert into toys (id, name, price, quantity) values(2, 'pop-up pirate', 9.00, 3);
+
+sqlite> insert into toys (id, name, price, quantity) values(3, 'joking cards', 4.50, 7);
+
+sqlite> insert into toys (id, name, price, quantity) values(4, 'crazy monkey', 15.50, 6);
+
+sqlite> insert into toys (id, name, price, quantity) values(5, 'racing car', 3.990, 13);
+
+sqlite> insert into toys (id, name, price, quantity) values(6, 'balloon penguins', 6.99, 3);
+
+sqlite> insert into toys (id, name, price, quantity) values(7, 'fishing kit', 4.99, 5);
+
+sqlite> insert into toys (id, name, price, quantity) values(8, 'monster house', 13.99, 8);
+
+sqlite> insert into toys (id, name, price, quantity) values(9, 'Yu-gi-oh cards', 1.99, 8);
+
+sqlite> insert into toys (id, name, price, quantity) values(10, 'bomb turret', 5.99, 2);
