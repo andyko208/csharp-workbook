@@ -19,3 +19,21 @@ sqlite> insert into toys (id, name, price, quantity) values(8, 'monster house', 
 sqlite> insert into toys (id, name, price, quantity) values(9, 'Yu-gi-oh cards', 1.99, 8);
 
 sqlite> insert into toys (id, name, price, quantity) values(10, 'bomb turret', 5.99, 2);
+
+sqlite> alter table toys add column department_id int;
+
+Update toys
+   ...> SET department_id = 101
+   ...> WHERE name = 'stuffed animal';
+
+Update toys
+   ...> SET department_id = 102
+   ...> WHERE name = 'bomb turret';
+
+sqlite> create table departments (id int, name varchar(100));
+
+sqlite> insert into departments (id, name) values(101, "penguins"); 
+
+sqlite> insert into deparments (id, name) values(102, "bubbles"); 
+
+sqlite> select * from toys join departments on toys.department_id = department_id;
