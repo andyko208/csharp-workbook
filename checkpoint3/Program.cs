@@ -22,13 +22,15 @@ namespace checkpoint3
         {
 
         }
-        public void delete()
+        public void delete(int itemId)
         {
-            
+            todos.id.RemoveAt(itemId-1);
+            todos.item.RemoveAt(itemId-1);
+            todos.status.RemoveAt(itemId-1);
         }
-        public void markdone()
+        public void markdone(int itemId)
         {
-            
+            todos.status[itemId-1] = "done";
         }
         public void listPending()
         {
