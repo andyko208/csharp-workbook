@@ -12,9 +12,8 @@ namespace checkpoint3
             Controller cont = new Controller();
             int index = 1;  //starting point of the id of items that will be listed
             string choice = "";
-            Context mycontext = new Context();
-            mycontext.Database.EnsureCreated();
-            mycontext.SaveChanges();
+            List<table> theList = cont.list();
+
             // while(choice != "quit")
             // {
             //     Console.Clear();
@@ -105,69 +104,80 @@ namespace checkpoint3
     }
     class Controller
     {
-        public table todos_all {get; set;}
-        // public table todos_pending {get; set;}
-        // public table todos_done{get; set;}
-        public Controller()
+        // public table todos_all {get; set;}
+        public Context context;
+        public Controller()     //DAO
         {
-            todos_all = new table();
-            // todos_pending = new table();
-            // todos_done = new table();
+            // todos_all = new table();
+            context = new Context();
+            context.Database.EnsureCreated();
 
         }
-        public void add(int id, string item)
+        public List<table> list(){
+            List<table> theResult = new List<table>();
+            foreach(table aTable in context.todos){
+                theResult.Add(aTable);
+            }  
+            return theResult;
+        }
+        public void add(string item)    //(int id, string item)
         {
-            todos_all.id.Add(id);       //set int i in main that increases as one item is added
-            todos_all.item.Add(item);
-            todos_all.status.Add("pending");
+            // todos_all.id.Add(id);       //set int i in main that increases as one item is added
+            // todos_all.item.Add(item);
+            // todos_all.status.Add("pending");
+            context.todos.Add(new table(item));
+            context.SaveChanges();
         }
         public void delete(int itemId)
         {
-            todos_all.id.RemoveAt(itemId);
-            todos_all.item.RemoveAt(itemId);
-            todos_all.status.RemoveAt(itemId);
+            // todos_all.id.RemoveAt(itemId);
+            // todos_all.item.RemoveAt(itemId);
+            // todos_all.status.RemoveAt(itemId); 
+            context.todos.Remove(context.todos.Find(itemId));
         }
         public void markdone(int itemId)
         {
-            todos_all.status[itemId] = "done";
+            // todos_all.status[itemId] = "done";
+            context.todos.Find(itemId).status = true;
         }
-        public void listPending()
-        {
-            Console.WriteLine(" id | item\t\t\t\t| status");
-            Console.WriteLine("----+--------------------------------------------");
-            for(int i = 0; i < todos_all.id.Count; i++)
-            {
-                if(todos_all.status[i] == "pending")
-                {
-                    Console.WriteLine(" {0}  | {1}                            | {2}", todos_all.id[i], todos_all.item[i], todos_all.status[i]);
-                }
-            }
-        }
-        public void listDone()
-        {
-            Console.WriteLine(" id | item\t\t\t\t| status");
-            Console.WriteLine("----+--------------------------------------------");
-            for(int i = 0; i < todos_all.id.Count; i++)
-            {
-                if(todos_all.status[i] == "done")
-                {
-                    Console.WriteLine(" {0}  | {1}\t\t\t\t| {2}", todos_all.id[i], todos_all.item[i], todos_all.status[i]);
-                }
-            }
-        }
-        public void listAll()
-        {
-            Console.WriteLine(" id | item\t\t\t\t| status");
-            Console.WriteLine("----+--------------------------------------------");
-            for(int i = 0; i < todos_all.id.Count; i++)
-            {
-                Console.WriteLine(" {0}  | {1}\t\t\t\t| {2}", todos_all.id[i], todos_all.item[i], todos_all.status[i]);
-            }
-        }
+        // public void listPending()
+        // {
+        //     Console.WriteLine(" id | item\t\t\t\t| status");
+        //     Console.WriteLine("----+--------------------------------------------");
+        //     // for(int i = 0; i < todos_all.id.Count; i++)
+        //     // {
+        //     //     if(todos_all.status[i] == "pending")
+        //     //     {
+        //     //         Console.WriteLine(" {0}  | {1}                            | {2}", todos_all.id[i], todos_all.item[i], todos_all.status[i]);
+        //     //     }
+        //     // }
+            
+        // }
+        // public void listDone()
+        // {
+        //     Console.WriteLine(" id | item\t\t\t\t| status");
+        //     Console.WriteLine("----+--------------------------------------------");
+        //     for(int i = 0; i < todos_all.id.Count; i++)
+        //     {
+        //         if(todos_all.status[i] == "done")
+        //         {
+        //             Console.WriteLine(" {0}  | {1}\t\t\t\t| {2}", todos_all.id[i], todos_all.item[i], todos_all.status[i]);
+        //         }
+        //     }
+        // }
+        // public void listAll()
+        // {
+        //     Console.WriteLine(" id | item\t\t\t\t| status");
+        //     Console.WriteLine("----+--------------------------------------------");
+        //     for(int i = 0; i < todos_all.id.Count; i++)
+        //     {
+        //         Console.WriteLine(" {0}  | {1}\t\t\t\t| {2}", todos_all.id[i], todos_all.item[i], todos_all.status[i]);
+        //     }
+        // }
     }
     public class Context : DbContext
     {
-        public DbSet<table> todos_all {get; set;}
+        public DbSet<table> todos {get; set;}
         override
         protected void OnConfiguring(DbContextOptionsBuilder optionsBuilder){
             optionsBuilder.UseSqlite("Filename = ./todos.db");
@@ -177,12 +187,20 @@ namespace checkpoint3
     {
         public int id {get; set;}         //index number of to-dos, starts at 1
         public string item {get; set;}    //name of to-do
-        public string status {get; set;}  //pending or done (boolean)
-        public table(int id, string item, string status)
+        public bool status {get; set;}  //pending or done (boolean)
+        public table(int id, string item)
         {
             this.id = id;
             this.item = item;
-            this.status = status;
+        }
+        public table(string item)
+        {
+            this.item = item;
+            this.status = false;
+        }
+        override
+        public String ToString(){
+            return id + "  | " + item + " \t" + (status? " done" : "pending");
         }
     }
 }
