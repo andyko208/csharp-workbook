@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace checkpoint3
 {
@@ -11,92 +12,95 @@ namespace checkpoint3
             Controller cont = new Controller();
             int index = 1;  //starting point of the id of items that will be listed
             string choice = "";
-            while(choice != "quit")
-            {
-                Console.Clear();
-                Console.WriteLine("Available functions");
-                Console.WriteLine("add: to add an item");
-                Console.WriteLine("delete: to delete an item");
-                Console.WriteLine("mark done: the item to mark as done");
-                Console.WriteLine("list pending: to list the pending items");
-                Console.WriteLine("list done: to list the done items");
-                Console.WriteLine("list all: to list all items");
-                Console.WriteLine("quit: to exit");
-                Console.WriteLine();
-                Console.WriteLine("What would you like to do? ");
-                choice = Console.ReadLine();
-                choice = choice.ToLower();
+            Context mycontext = new Context();
+            mycontext.Database.EnsureCreated();
+            mycontext.SaveChanges();
+            // while(choice != "quit")
+            // {
+            //     Console.Clear();
+            //     Console.WriteLine("Available functions");
+            //     Console.WriteLine("add: to add an item");
+            //     Console.WriteLine("delete: to delete an item");
+            //     Console.WriteLine("mark done: the item to mark as done");
+            //     Console.WriteLine("list pending: to list the pending items");
+            //     Console.WriteLine("list done: to list the done items");
+            //     Console.WriteLine("list all: to list all items");
+            //     Console.WriteLine("quit: to exit");
+            //     Console.WriteLine();
+            //     Console.WriteLine("What would you like to do? ");
+            //     choice = Console.ReadLine();
+            //     choice = choice.ToLower();
                 
-                if(choice == "add")
-                {
-                    Console.WriteLine("Enter a description: ");
-                    string nameOfItem = Console.ReadLine();
-                    cont.add(index, nameOfItem);
-                    index++;
-                    Console.WriteLine();
-                    Console.WriteLine("[item added]");
-                    Console.WriteLine();
-                    Console.WriteLine("[press enter]");
-                    choice = Console.ReadLine();
+            //     if(choice == "add")
+            //     {
+            //         Console.WriteLine("Enter a description: ");
+            //         string nameOfItem = Console.ReadLine();
+            //         cont.add(index, nameOfItem);
+            //         index++;
+            //         Console.WriteLine();
+            //         Console.WriteLine("[item added]");
+            //         Console.WriteLine();
+            //         Console.WriteLine("[press enter]");
+            //         choice = Console.ReadLine();
 
-                }
-                else if(choice == "delete")
-                {
-                    Console.WriteLine("Enter an item id: ");
-                    int delid = Convert.ToInt32(Console.ReadLine());
-                    delid -= 1;   //user friendly
-                    Console.WriteLine("id\t   : {0}",cont.todos_all.id[delid]);
-                    Console.WriteLine("description: {0}",cont.todos_all.item[delid]);
-                    Console.WriteLine("status\t   : {0}",cont.todos_all.status[delid]);
-                    cont.delete(delid);
-                    Console.WriteLine();
-                    Console.WriteLine("[item deleted]");
-                    Console.WriteLine();
-                    Console.WriteLine("[press enter]");
-                    choice = Console.ReadLine();
-                }
-                else if(choice == "mark done")
-                {
-                    Console.WriteLine("Enter an item id: ");
-                    int doneid = Convert.ToInt32(Console.ReadLine());
-                    doneid -= 1;    //user friendly
-                    cont.markdone(doneid);
-                    Console.WriteLine();
-                    Console.WriteLine("[item updated]");
-                    Console.WriteLine();
-                    Console.WriteLine("[press enter]");
-                    choice = Console.ReadLine();
-                }
-                else if(choice == "list pending")
-                {
-                    cont.listPending();
-                    Console.WriteLine("[press enter]");
-                    choice = Console.ReadLine();
-                }
-                else if(choice == "list done")
-                {
-                    cont.listDone();
-                    Console.WriteLine("[press enter]");
-                    choice = Console.ReadLine();
-                }
-                else if(choice == "list all")
-                {
-                    Console.WriteLine("this is crazy boi!");
-                    cont.listAll();
-                    Console.WriteLine("[press enter]");
-                    choice = Console.ReadLine();
-                }
-                else
-                {
-                    if(choice != "quit")
-                    {
-                        Console.WriteLine("[ERROR] Invalid action");
-                        Console.WriteLine();
-                        Console.WriteLine("[press enter]");
-                        choice = Console.ReadLine();   
-                    }
-                }
-            }
+            //     }
+            //     else if(choice == "delete")
+            //     {
+            //         Console.WriteLine("Enter an item id: ");
+            //         int delid = Convert.ToInt32(Console.ReadLine());
+            //         delid -= 1;   //user friendly
+            //         Console.WriteLine("id\t   : {0}",cont.todos_all.id[delid]);
+            //         Console.WriteLine("description: {0}",cont.todos_all.item[delid]);
+            //         Console.WriteLine("status\t   : {0}",cont.todos_all.status[delid]);
+            //         cont.delete(delid);
+            //         Console.WriteLine();
+            //         Console.WriteLine("[item deleted]");
+            //         Console.WriteLine();
+            //         Console.WriteLine("[press enter]");
+            //         choice = Console.ReadLine();
+            //     }
+            //     else if(choice == "mark done")
+            //     {
+            //         Console.WriteLine("Enter an item id: ");
+            //         int doneid = Convert.ToInt32(Console.ReadLine());
+            //         doneid -= 1;    //user friendly
+            //         cont.markdone(doneid);
+            //         Console.WriteLine();
+            //         Console.WriteLine("[item updated]");
+            //         Console.WriteLine();
+            //         Console.WriteLine("[press enter]");
+            //         choice = Console.ReadLine();
+            //     }
+            //     else if(choice == "list pending")
+            //     {
+            //         cont.listPending();
+            //         Console.WriteLine("[press enter]");
+            //         choice = Console.ReadLine();
+            //     }
+            //     else if(choice == "list done")
+            //     {
+            //         cont.listDone();
+            //         Console.WriteLine("[press enter]");
+            //         choice = Console.ReadLine();
+            //     }
+            //     else if(choice == "list all")
+            //     {
+            //         Console.WriteLine("this is crazy boi!");
+            //         cont.listAll();
+            //         Console.WriteLine("[press enter]");
+            //         choice = Console.ReadLine();
+            //     }
+            //     else
+            //     {
+            //         if(choice != "quit")
+            //         {
+            //             Console.WriteLine("[ERROR] Invalid action");
+            //             Console.WriteLine();
+            //             Console.WriteLine("[press enter]");
+            //             choice = Console.ReadLine();   
+            //         }
+            //     }
+            // }
         }
     }
     class Controller
@@ -161,16 +165,24 @@ namespace checkpoint3
             }
         }
     }
-    class table
+    public class Context : DbContext
     {
-        public List<int> id {get; set;}     //index number of to-dos, starts at 1
-        public List<string> item {get; set;}    //name of to-do
-        public List<string> status {get; set;} //pending or done (boolean)
-        public table()
+        public DbSet<table> todos_all {get; set;}
+        override
+        protected void OnConfiguring(DbContextOptionsBuilder optionsBuilder){
+            optionsBuilder.UseSqlite("Filename = ./todos.db");
+        }
+    }
+    public class table
+    {
+        public int id {get; set;}         //index number of to-dos, starts at 1
+        public string item {get; set;}    //name of to-do
+        public string status {get; set;}  //pending or done (boolean)
+        public table(int id, string item, string status)
         {
-            id = new List<int>();
-            item = new List<string>();
-            status = new List<string>();
+            this.id = id;
+            this.item = item;
+            this.status = status;
         }
     }
 }
