@@ -46,7 +46,7 @@ namespace checkpoint3
                     int delid = Convert.ToInt32(Console.ReadLine());
                     Console.WriteLine("id\t   : {0}", cont.context.todos.Find(delid).id);
                     Console.WriteLine("description: {0}",cont.context.todos.Find(delid).item);
-                    Console.WriteLine("status\t   : {0}",cont.context.todos.Find(delid).status);
+                    Console.WriteLine("status\t   : {0}",(cont.context.todos.Find(delid).status? " done" : "pending"));
                     cont.delete(delid);
                     Console.WriteLine();
                     Console.WriteLine("[item deleted]");
