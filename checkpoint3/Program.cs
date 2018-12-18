@@ -11,10 +11,8 @@ namespace checkpoint3
         {
             Controller cont = new Controller();
             string choice = "";
-            cont.listAll();
             while(choice != "quit")
             {
-                Console.Clear();
                 Console.WriteLine("Available functions");
                 Console.WriteLine("add: to add an item");
                 Console.WriteLine("delete: to delete an item");
@@ -44,26 +42,43 @@ namespace checkpoint3
                 {
                     Console.WriteLine("Enter an item id: ");
                     int delid = Convert.ToInt32(Console.ReadLine());
-                    Console.WriteLine("id\t   : {0}", cont.context.todos.Find(delid).id);
-                    Console.WriteLine("description: {0}",cont.context.todos.Find(delid).item);
-                    Console.WriteLine("status\t   : {0}",(cont.context.todos.Find(delid).status? " done" : "pending"));
-                    cont.delete(delid);
-                    Console.WriteLine();
-                    Console.WriteLine("[item deleted]");
-                    Console.WriteLine();
-                    Console.WriteLine("[press enter]");
-                    choice = Console.ReadLine();
+                    try{
+                        Console.WriteLine("id\t   : {0}", cont.context.todos.Find(delid).id);
+                        Console.WriteLine("description: {0}",cont.context.todos.Find(delid).item);
+                        Console.WriteLine("status\t   : {0}",(cont.context.todos.Find(delid).status? " done" : "pending"));
+                        cont.delete(delid);
+                        Console.WriteLine();
+                        Console.WriteLine("[item deleted]");
+                        Console.WriteLine();
+                        Console.WriteLine("[press enter]");
+                        choice = Console.ReadLine();
+                    }
+                    catch{
+                        Console.WriteLine();
+                        Console.WriteLine("try a different id");
+                        Console.WriteLine();
+                        Console.WriteLine("[press enter]");
+                        choice = Console.ReadLine();
+                    }
                 }
                 else if(choice == "mark done")
                 {
                     Console.WriteLine("Enter an item id: ");
                     int doneid = Convert.ToInt32(Console.ReadLine());
-                    cont.markdone(doneid);
-                    Console.WriteLine();
-                    Console.WriteLine("[item updated]");
-                    Console.WriteLine();
-                    Console.WriteLine("[press enter]");
-                    choice = Console.ReadLine();
+                    try{
+                        cont.markdone(doneid);
+                        Console.WriteLine("[item updated]");
+                        Console.WriteLine();
+                        Console.WriteLine("[press enter]");
+                        choice = Console.ReadLine();
+                    }
+                    catch{
+                        Console.WriteLine();
+                        Console.WriteLine("try a different id");
+                        Console.WriteLine();
+                        Console.WriteLine("[press enter]");
+                        choice = Console.ReadLine();
+                    }
                 }
                 else if(choice == "list pending")
                 {
